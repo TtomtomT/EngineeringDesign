@@ -16,14 +16,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using audioSolution;
-
+using System.Threading;
 
 namespace audioSolution
 {
-	/// <summary>
-	/// Description of MainForm.
-	/// </summary>
-	public partial class MainForm : Form
+    /// <summary>
+    /// Description of MainForm.
+    /// </summary>
+    public partial class MainForm : Form
 	{
 		string file = "";
 		long channels;
@@ -76,7 +76,7 @@ namespace audioSolution
             if (file.Length > 1)
 			{
                 axVLCPlugin21.playlist.play();
-                PeakFinder.run(file, channels);
+                PeakFinder.run(file, channels, false);
 			} else 
 			{
 				textBox1.Text += "No file split yet" + "\r\n";
@@ -102,6 +102,21 @@ namespace audioSolution
                 return;
             }
             this.textBox1.Text += text;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Thread t = new Thread(() => PeakFinder.run(file, channels, true));
+            t.Start();
+            System.Threading.Thread.Sleep(1400);
+            pictureBox1.Image = Image.FromFile("C:\\Users\\s166268\\Documents\\SharpDevelop Projects\\audioSolution\\audioSolution\\ED.gif");
+            //PeakFinder.run(file, channels, true);
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
